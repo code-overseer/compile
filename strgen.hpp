@@ -16,7 +16,7 @@ namespace compile
         {
             static constexpr char value()
             {
-                auto constexpr mod = (Rnd<V>::value ^ sizeof...(N))% 26;
+                auto constexpr mod = (Rnd<V>::value ^ sizeof...(N)) % 26;
                 if constexpr (mod <= 9)
                 {
                     return mod + '0';
