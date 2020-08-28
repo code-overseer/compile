@@ -1,41 +1,93 @@
 #ifndef COMPILE_COUNTER_HPP
 #define COMPILE_COUNTER_HPP
 
-// counter only works on (non macOS) gcc afaik
-
-namespace compile 
+namespace compile
 {
-    class Counter 
+    namespace
     {
-    private:
-        template <int N>
-        struct Flag
+        template <typename T> 
+        class Flag
         {
-            friend constexpr int get(Counter::Flag<N>);
-            static constexpr int value = N;
+            struct Trigger
+            {
+                friend constexpr void get(Trigger);
+            };
+
+            template <bool> struct Writer
+            {
+                friend constexpr void get(Trigger) {}
+            };
+
+            template <class U, int = (get(Trigger{}),0)>
+            static constexpr bool exists(int)
+            {
+                return true;
+            }
+
+            template <class U>
+            static constexpr bool exists(short)
+            {
+                return false;
+            }
+
+          public:
+            template <class U = Trigger, bool Value = exists<U>(0), int = sizeof(Writer<Value && 0>)>
+            static constexpr int ReadSet()
+            {
+                return Value;
+            }
+
+            template <class U = Trigger, bool Value = exists<U>(0)>
+            static constexpr int Read()
+            {
+                return Value;
+            }
         };
         
-        template <int N>
-        struct Write
-        {
-            friend constexpr int get(Counter::Flag<N>) { return N; }
-            static constexpr int value = N;
+        template <typename T,int I> struct Tag {};
+
+        template<typename T,int N,bool B>
+        struct Checker{
+            static constexpr int currentval() noexcept{
+                return N;
+            }
         };
-        
-        template <int N, int = get(Counter::Flag<N>{})>
-        static constexpr int read(int, Counter::Flag<N>, int R = read(0, Counter::Flag<N + 1>{})) { 
-            return R; 
+
+        template<typename T,int N>
+        struct CheckerWrapper{
+            template<bool B=Flag<Tag<T,N>>::Read(),int M=Checker<T,N,B>::currentval()>
+            static constexpr int currentval(){
+                return M;
+            }
+        };
+
+        template<typename T,int N>
+        struct Checker<T,N,true>{
+            template<int M=CheckerWrapper<T,N+1>::currentval()>
+            static constexpr int currentval() noexcept{
+                return M;
+            }
+        };
+
+        template<typename T,int N,bool B=Flag<Tag<T,N>>::ReadSet()>
+        struct Next{
+            static constexpr int value() noexcept{
+                return N;
+            }
+        };
+    }
+
+    template <typename T> 
+    struct Counter
+    {
+        template <int N=CheckerWrapper<T,0>::currentval()> 
+        static constexpr int current()
+        {
+            return N;
         }
-        
-        template <int N>
-        static constexpr int read(float, Counter::Flag<N>) { return N; }
-        
-        template <int M = 0, int N = read(M, Counter::Flag<M>{}) + M>
-        static constexpr int current() { return N; }
-    public:    
-        template <int N = 0>
-        static constexpr int increment(int R = Write<read(0, Counter::Flag<0>{}) + N>::value) {
-            return R;
+        template <int N=CheckerWrapper<T,0>::currentval()> 
+        static constexpr int increment(){
+            return Next<T,N>::value();
         }
     };
 }
