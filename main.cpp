@@ -1,19 +1,34 @@
 #include <cstdio>
-// #include "time.h"
-#include "for.hpp"
+#include "time.h"
+// #include "for.hpp"
 // #include "counter.hpp"
 // #include "intgen.hpp"
+#include "time.hpp"
 #include "strgen.hpp"
-#include "logic.hpp"
+// #include "logic.hpp"
 #include <utility>
 #include "array.hpp"
 
 
+
+template<typename T>
+static void escape(T &&t) {
+  __asm__ __volatile__ ("" : : "g" (t) : "memory");
+}
+
+static void clobber() {
+  asm volatile("" : : : "memory");
+}
+
+void normal();
+
 int main(int argc, char const* argv[])
 {
-    constexpr auto a = compile::Repeat<int, -1, 16>::value;
-    compile::for_<16>([&](auto i){ printf("%i\n", a[i.value]); });
-    compile::for_<16>([&](auto i){ printf("%s\n", compile::StrGen<5>::value()); });
-
+    printf("%u\n", compile::TimeStamp::value);
+    printf("%s\n", compile::StrGen<6>::value());
+    printf("%s\n", compile::StrGen<6>::value());
+    printf("%s\n", compile::StrGen<6>::value());
+    printf("%s\n", compile::StrGen<6>::value());
 	return 0;
 }
+
