@@ -2,23 +2,18 @@
 #define COMPILE_FOR_HPP
 
 #include <utility>
+#include <type_traits>
 
 namespace compile
 {
-    template<typename T, T Val>
-    struct Constant
-    {
-        static constexpr T value = Val;
-    };
-
     template <class F, std::size_t... Is>
-    void for_(F func, std::index_sequence<Is...>)
+    constexpr void for_(F func, std::index_sequence<Is...>)
     {
-      (func(Constant<std::size_t, Is>{}), ...);
+      (func(std::integral_constant<std::size_t, Is>{}), ...);
     }
 
     template <std::size_t N, typename F>
-    void for_(F func)
+    constexpr void for_(F func)
     {
         for_(func, std::make_index_sequence<N>());
     }

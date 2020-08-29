@@ -2,6 +2,7 @@
 #define COMPILE_STRGEN_HPP
 
 #include <cstdint>
+#include <utility>
 #include "intgen.hpp"
 #include "counter.hpp"
 
@@ -9,8 +10,11 @@ namespace compile
 {
     namespace
     {
+        template <typename U>
+        struct _StrGen;
+
         template<int... N>
-        struct __StrGen 
+        struct _StrGen<std::integer_sequence<int, N...>>
         {
         private:
             template <uint32_t I>
@@ -41,22 +45,16 @@ namespace compile
                 static constexpr char value[]{(AlphaNum<N, V * sizeof...(N)>::value())...,'\0'};
             };
         public:
-            template<int V = Counter<__StrGen<N...>>::increment()>
+            template<int V = Counter<_StrGen<std::integer_sequence<int, N...>>>::increment()>
             static constexpr char const* value()
             {
                 return Array<V>::value;
             }
         };
-
-        template <std::size_t N, std::size_t ... Next>
-        struct _StrGen : _StrGen<N-1U, N-1U, Next...>{ };
-
-        template <std::size_t ... Next>
-        struct _StrGen<0U, Next ... >{ using type = __StrGen<Next ... >; };
     }
     
     template<int N>
-    using StrGen = typename _StrGen<N>::type;
+    struct StrGen : _StrGen<std::make_integer_sequence<int, N>> {};
 }
 
 #endif

@@ -85,8 +85,10 @@ namespace compile
         {
             return N;
         }
+        
         template <int N=CheckerWrapper<T,0>::currentval()> 
-        static constexpr int increment(){
+        static constexpr int increment()
+        {
             return Next<T,N>::value();
         }
     };
