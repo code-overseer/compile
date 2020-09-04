@@ -6,12 +6,15 @@
 
 namespace compile
 {
-    template <class F, std::size_t... Is>
-    void for_(F func, std::index_sequence<Is...>)
+    namespace
     {
-      (func(std::integral_constant<std::size_t, Is>{}), ...);
+        template <class F, std::size_t... Is>
+        void for_(F func, std::index_sequence<Is...>)
+        {
+          (func(std::integral_constant<std::size_t, Is>{}), ...);
+        }
     }
-
+    
     template <std::size_t N, typename F>
     void for_(F func)
     {

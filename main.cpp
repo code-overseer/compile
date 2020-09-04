@@ -1,14 +1,10 @@
 #include <cstdio>
-#include "time.h"
-// #include "for.hpp"
-// #include "counter.hpp"
-// #include "intgen.hpp"
+#include "counter.hpp"
 #include "time.hpp"
 #include "strgen.hpp"
-// #include "logic.hpp"
+#include "for.hpp"
 #include <utility>
-#include "array.hpp"
-
+#include <type_traits>
 
 
 template<typename T>
@@ -20,15 +16,20 @@ static void clobber() {
   asm volatile("" : : : "memory");
 }
 
-void normal();
-
 int main(int argc, char const* argv[])
 {
-    printf("%u\n", compile::TimeStamp::value);
-    printf("%s\n", compile::StrGen<6>::value());
-    printf("%s\n", compile::StrGen<6>::value());
-    printf("%s\n", compile::StrGen<6>::value());
-    printf("%s\n", compile::StrGen<6>::value());
+    printf("Random string\n");
+    compile::for_<6>([&](auto i){ printf("%s\n", compile::StrGen<6>::value()); });
+
+    printf("\nCounter\n");
+
+    printf("%i\n", std::integral_constant<int, compile::Counter<void>::increment()>::value);
+    printf("%i\n", std::integral_constant<int, compile::Counter<void>::increment()>::value);
+    printf("%i\n", std::integral_constant<int, compile::Counter<void>::increment()>::value);
+    printf("%i\n", std::integral_constant<int, compile::Counter<void>::increment()>::value);
+    printf("%i\n", std::integral_constant<int, compile::Counter<void>::increment()>::value);
+    printf("%i\n", std::integral_constant<int, compile::Counter<void>::increment()>::value);
+
 	return 0;
 }
 
