@@ -19,7 +19,7 @@ namespace compile
             typedef IntGen<Next::state, A*A, 0, M> Gen2;
         };
 
-        template <int N = Counter<IntGen<S>>::increment()>
+        template <int N = Counter<IntGen<S>>{}.increment()>
         static constexpr uint32_t value() 
         { 
             return state ^ (N % 31); 

@@ -13,7 +13,8 @@ namespace compile
                 friend constexpr void get(Trigger);
             };
 
-            template <bool> struct Writer
+            template <bool> 
+            struct Writer
             {
                 friend constexpr void get(Trigger) {}
             };
@@ -55,7 +56,7 @@ namespace compile
 
         template<typename T,int N>
         struct CheckerWrapper{
-            template<bool B=Flag<Tag<T,N>>::Read(),int M=Checker<T,N,B>::currentval()>
+            template<bool B=Flag<Tag<T,N>>{}.Read(),int M=Checker<T,N,B>{}.currentval()>
             static constexpr int currentval(){
                 return M;
             }
@@ -63,13 +64,13 @@ namespace compile
 
         template<typename T,int N>
         struct Checker<T,N,true>{
-            template<int M=CheckerWrapper<T,N+1>::currentval()>
+            template<int M=CheckerWrapper<T,N+1>{}.currentval()>
             static constexpr int currentval() noexcept{
                 return M;
             }
         };
 
-        template<typename T,int N,bool B=Flag<Tag<T,N>>::ReadSet()>
+        template<typename T,int N,bool B=Flag<Tag<T,N>>{}.ReadSet()>
         struct Next{
             static constexpr int value() noexcept{
                 return N;
@@ -80,16 +81,16 @@ namespace compile
     template <typename T> 
     struct Counter
     {
-        template <int N=CheckerWrapper<T,0>::currentval()> 
+        template <int N=CheckerWrapper<T,0>{}.currentval()> 
         static constexpr int current()
         {
             return N;
         }
         
-        template <int N=CheckerWrapper<T,0>::currentval()> 
+        template <int N=CheckerWrapper<T,0>{}.currentval()> 
         static constexpr int increment()
         {
-            return Next<T,N>::value();
+            return Next<T,N>{}.value();
         }
     };
 }

@@ -25,8 +25,8 @@ namespace compile
             {
                 static constexpr char value()
                 {
-                    auto constexpr mod = (Rnd<V>::value() ^ U) % 23 + (Rnd<V>::value() % 3) + (Rnd<V>::value() % 2);
-                    auto constexpr branch = Rnd<V>::value() % 3;
+                    auto constexpr mod = (Rnd<V>{}.value() ^ U) % 23 + (Rnd<V>{}.value() % 3) + (Rnd<V>{}.value() % 2);
+                    auto constexpr branch = Rnd<V>{}.value() % 3;
                     if constexpr (!branch)
                     {
                         return mod % 7 + mod % 3 + mod % 2 + '0';
@@ -42,10 +42,10 @@ namespace compile
             template<int V>
             struct Array
             {
-                static constexpr char value[]{(AlphaNum<N, V * sizeof...(N)>::value())...,'\0'};
+                static constexpr char value[]{(AlphaNum<N, V * sizeof...(N)>{}.value())...,'\0'};
             };
         public:
-            template<int V = Counter<_StrGen<std::integer_sequence<int, N...>>>::increment()>
+            template<int V = Counter<_StrGen<std::integer_sequence<int, N...>>>{}.increment()>
             static constexpr char const* value()
             {
                 return Array<V>::value;
