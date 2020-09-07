@@ -25,11 +25,11 @@ namespace compile
             {
                 static constexpr char value()
                 {
-                    auto constexpr mod = (Rnd<V>::value() ^ U) % 23 + (Rnd<V>::value() % 3);
+                    auto constexpr mod = (Rnd<V>::value() ^ U) % 23 + (Rnd<V>::value() % 3) + (Rnd<V>::value() % 2);
                     auto constexpr branch = Rnd<V>::value() % 3;
                     if constexpr (!branch)
                     {
-                        return mod % 7 + mod % 3 + '0';
+                        return mod % 7 + mod % 3 + mod % 2 + '0';
                     }
                     if constexpr (branch == 1)
                     {
