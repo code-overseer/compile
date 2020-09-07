@@ -6,16 +6,6 @@
 #include <utility>
 #include <type_traits>
 
-
-template<typename T>
-static void escape(T &&t) {
-  __asm__ __volatile__ ("" : : "g" (t) : "memory");
-}
-
-static void clobber() {
-  __asm__ volatile("" : : : "memory");
-}
-
 int main(int argc, char const* argv[])
 {
     printf("Random string\n");
