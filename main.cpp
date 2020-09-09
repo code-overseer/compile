@@ -1,8 +1,5 @@
 #include <cstdio>
-#include "counter.hpp"
-#include "time.hpp"
-#include "strgen.hpp"
-#include "for.hpp"
+#include "include/compile.hpp"
 #include <utility>
 #include <type_traits>
 

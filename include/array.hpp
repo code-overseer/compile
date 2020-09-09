@@ -15,9 +15,9 @@ namespace compile
             template<std::size_t V>
             struct Argument
             {
-                static constexpr T value() { return Arg; }
+                static constexpr T value = Arg;
             };
-            static constexpr T value[]{(Argument<N>::value())...};
+            static constexpr T value[]{Argument<N>::value...};
         };
 
         template <typename T>
